@@ -27,7 +27,7 @@
             
             <div class="campo">
                 <label><strong>Data</strong></label>
-                <input type="date" id="data" name="data" required>
+                <input type="date" id="data" name="data" pattern="\d{4}-\d{2}-\d{2}" required>
             </div>
         </fieldset>
         <!-- Alterado o tipo do botão para evitar recarregamento da página -->
@@ -43,12 +43,14 @@
             </tr>
         </thead>
         <tbody id="corpoTabela">
-            
+                <td>Produto</td>
+                <td>R$ 10,00</td>
+                <td>01/02/2023</td>
         </tbody>
 
     </table>
     <br>
-    
+
     <h3 id="total"><strong>TOTAL</strong></h3>
 
     <script src="/JS/script.js"></script>

@@ -7,6 +7,7 @@ function inserir() {
     var valor = parseFloat(valorElement.value);
     var data = dataElement.value;
 
+
     if (produto.trim() !== "" && !isNaN(valor)) {
         var corpoTabela = document.getElementById("corpoTabela");
         var novaLinha = document.createElement("tr");
@@ -21,7 +22,7 @@ function inserir() {
         novaLinha.appendChild(colunaValor);
 
         var colunaData = document.createElement("td");
-        colunaData.textContent = data;
+        colunaData.textContent = formatarDataCurta(data); // Utiliza a formatação de data curta
         novaLinha.appendChild(colunaData);
 
         var colunaRemover = document.createElement("td");
@@ -72,7 +73,7 @@ function mostrarLista() {
         novoItem.innerHTML = `
             <td>${dados[0]}</td>
             <td>R$ ${valor}</td>
-            <td>${data}</td>
+            <td>${formatarDataCurta(data)}</td>
             <td><button onclick="removerItem(${i})">Remover</button></td>
         `;
 
@@ -83,6 +84,13 @@ function mostrarLista() {
     // Atualizar o total na interface
     atualizarTotalNaInterface();
 }
+
+// Função para formatar uma data no formato curto (short date)
+function formatarDataCurta(data) {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(data).toLocaleDateString(undefined, options);
+}
+
 function removerItem(indice) {
     var corpoTabela = document.getElementById("corpoTabela");
     corpoTabela.deleteRow(indice);

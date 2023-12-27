@@ -49,5 +49,13 @@ button {
 th {
     background-color: rgb(247, 164, 10) ;
     color: black;
-    padding: 30px 50px 30px 50px;
+    padding: 30px 70px 30px 70px;
 }
+
+tbody {
+    color: black;
+    font-family: Arial;
+    background-color: blanchedalmond;
+    text-align: center;
+}
+
