@@ -1,58 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/CSS/style.css">
-    <title>Lista Orçamentaria</title>
+    <title>PLANILHA FINANCEIRA</title>
 </head>
 <body>
-    <div>
-        <h1 id="titulo">Lista Orçamentaria</h1>
-        <p id="subtitulo">Mês Dezembro</p>
-        <br>
-    </div>
+    <header>
+        <h1 id="titulo">PLANILHA FINANCEIRA</h1><br>
+    </header>
     
-    <form>
+    <form id="formulario"> <!-- Corrigido aqui: a tag <form> foi movida para cá -->
         <fieldset id="grupo">
             <div class="campo">
-                <label><strong>Produto</strong></label>
-                <input type="text" id="produto" name="produto" required>
-            </div>
+                
+                <label for="descrição"><strong>Descrição</strong></label>
+                <input type="text" id="descrição" name="descrição" placeholder="Digite sua descrição aqui" required>
 
-            <div class="campo">
-                <label><strong>Valor</strong></label>
-                <input type="number" id="valor" name="valor" required>
-            </div>
-            
-            <div class="campo">
-                <label><strong>Data</strong></label>
-                <input type="date" id="data" name="data" pattern="\d{4}-\d{2}-\d{2}" required>
-            </div>
+                <label for="valor"><strong>Valor</strong></label>
+                <input type="number" id="valor" name="valor" placeholder="Digite o valor aqui" required>
+
+                <label for="banco"><strong>Escolha o banco</strong></label>
+                <select id="banco" name="banco">
+                    <option value="" disabled selected>Selecione uma opção</option>
+                    <option value="Nubank">Nubank</option>
+                    <option value="Santander">Santander</option>
+                    <option value="Inter">Inter</option>
+                    <option value="C6 Bank">C6 Bank</option>
+                </select>
+
+                <label for="data"><strong>Data</strong></label>
+                <input type="date" id="data" name="data" required>
+                
+            </div> 
+            <!-- Alterado o tipo do botão para evitar recarregamento da página -->
+            <button id="inserir" type="submit"><strong>Inserir</strong></button>
         </fieldset>
-        <!-- Alterado o tipo do botão para evitar recarregamento da página -->
-        <button class="button" id="button" type="button" onclick="inserir()"><strong>Inserir</strong></button> 
     </form>
-    <h2 id="titulolista">CONTROLE DE GASTO</h2>
+    
+    <h2 id="titulolista">DADOS</h2><br>
+
     <table id="tabelaDados">
         <thead>
             <tr>
-                <th>Produto</th>
+                <th>Descrição</th>
                 <th>Valor</th>
+                <th>Tipo</th>
+                <th>Banco</th>
                 <th>Data</th>
             </tr>
         </thead>
         <tbody id="corpoTabela">
-                <td>Produto</td>
-                <td>R$ 10,00</td>
-                <td>01/02/2023</td>
+                
         </tbody>
-
     </table>
     <br>
 
     <h3 id="total"><strong>TOTAL</strong></h3>
-
+    
     <script src="/JS/script.js"></script>
 </body>
 </html>

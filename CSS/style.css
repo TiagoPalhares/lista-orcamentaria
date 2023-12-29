@@ -1,61 +1,145 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
 
-#titulo {
-    font-family: arial;
-    color: black;
-    margin-left: 7%;
-}
-
-#subtitulo{
-    font-family: arial;
-    color: black;
-    margin-left: 10%;
-}
-fieldset {
-    border: 0;
-}
-
-#titulolista {
-    font-family: Arial;   
-    color: green;
-    margin-top: 5%;
-    margin-left: 10%;
-}
-
 body {
-    font-family: Arial;   
-    color: black;
-    margin-top: 2%;
-    margin-left: 30%;
-}
-
-input {
-    padding: 8px;
-    margin-bottom: 16px;
-    display: flex;
-}    
-
-
-button {
-    background-color: darkblue;
-    color: whitesmoke;
-    padding: 10px;
-    border: none;
-}
-
-th {
-    background-color: rgb(247, 164, 10) ;
-    color: black;
-    padding: 30px 70px 30px 70px;
-}
-
-tbody {
-    color: black;
+    background-color: rgb(238, 224, 199);
     font-family: Arial;
-    background-color: blanchedalmond;
+    color: black;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    width: 50%; /* Defina a largura desejada */
+    text-align: center; /* Centralize o texto dentro do formulário */
+    box-sizing: border-box;
+}
+
+fieldset {
+    border: 2px solid darkblue;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 20px;
     text-align: center;
 }
 
+legend {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: darkblue;
+    margin: 0 auto;
+}
+
+.campo {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#inserir {
+    background-color: darkblue;
+    color: whitesmoke;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#inserir:hover {
+    background-color: navy;
+}
+
+#tabelaDados, #total {
+    width: 50%;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid darkblue;
+    padding: 15px;
+    text-align: center;
+}
+
+th {
+    background-color: darkblue;
+    color: whitesmoke;
+}
+
+tbody {
+    background-color: #f8f8f8;
+}
+
+#total {
+    margin-top: 20px;
+    font-size: 1.5em;
+    color: darkblue;
+    background-color: lightblue;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 50%;
+    box-sizing: border-box;
+}
+
+#titulolista {
+    color: darkblue;
+    margin-top: 3%;
+    
+}
+
+#titulo {
+    color: darkblue;
+
+}
+
+
+.receita{
+    color: darkgreen;
+    background-color: lightgreen;
+}
+
+.despesa{
+    color: darkred;
+    background-color: lightcoral;
+}
+
+span.inter {
+    color: darkgoldenrod;
+    background-color: rgb(253, 187, 19);
+}
+
+span.nubank {
+    color: rgb(49, 2, 49);
+    background-color: rgb(241, 17, 241);
+}
+
+span.santander {
+    color: rgb(61, 11, 4);
+    background-color:rgb(253, 128, 128);;
+}
+
+span.c6 {
+    color: rgb(29, 28, 28);
+    background-color: rgb(122, 122, 122);
+}

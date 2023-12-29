@@ -1,159 +1,149 @@
-function inserir() {
-    var produtoElement = document.getElementById("produto");
-    var valorElement = document.getElementById("valor");
-    var dataElement = document.getElementById("data");
+// Array para armazenar os dados do formulário
+var dadosArray = [];
 
-    var produto = produtoElement.value;
-    var valor = parseFloat(valorElement.value);
-    var data = dataElement.value;
-
-
-    if (produto.trim() !== "" && !isNaN(valor)) {
-        var corpoTabela = document.getElementById("corpoTabela");
-        var novaLinha = document.createElement("tr");
-
-        // Criar células para cada coluna
-        var colunaProduto = document.createElement("td");
-        colunaProduto.textContent = produto;
-        novaLinha.appendChild(colunaProduto);
-
-        var colunaValor = document.createElement("td");
-        colunaValor.textContent = "R$ " + valor.toFixed(2);
-        novaLinha.appendChild(colunaValor);
-
-        var colunaData = document.createElement("td");
-        colunaData.textContent = formatarDataCurta(data); // Utiliza a formatação de data curta
-        novaLinha.appendChild(colunaData);
-
-        var colunaRemover = document.createElement("td");
-        var botaoRemover = document.createElement("button");
-        botaoRemover.textContent = "Remover";
-        botaoRemover.onclick = function() {
-            removerItem(corpoTabela.rows.length - 1);
-        };
-        colunaRemover.appendChild(botaoRemover);
-        novaLinha.appendChild(colunaRemover);
-
-        // Adicionar a linha à tabela
-        corpoTabela.appendChild(novaLinha);
-
-        // Adicionar o novo item à lista localmente
-        salvarListaLocalmente();
-
-        // Limpar os campos de entrada 
-        produtoElement.value = "";
-        valorElement.value = "";
-        dataElement.value = "";
-
-        // Atualizar a lista na interface
-        mostrarLista();
-
-    } else {
-        alert("Por favor, insira um produto e um preço válido.");
+// Carregar dados do localStorage ao carregar a página
+window.onload = function() {
+    var dadosSalvos = localStorage.getItem('dadosArray');
+    if (dadosSalvos) {
+        dadosArray = JSON.parse(dadosSalvos);
+        atualizarTabela();
     }
-}
+};
 
-function mostrarLista() {
-    var corpoTabela = document.getElementById("corpoTabela");
-    var itens = obterListaLocalmente();
+// Função para lidar com o envio do formulário
+document.getElementById("formulario").addEventListener("submit", function(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
 
-    // Limpar a tabela existente antes de exibir os itens
-    corpoTabela.innerHTML = "";
+    // Obtemos os valores do formulário
+    var descrição = document.getElementById("descrição").value;
+    var valor = parseFloat(document.getElementById("valor").value);
+    var banco = document.getElementById("banco").value;
+    var data = document.getElementById("data").value;
 
-    // Adicionar os itens da lista local à tabela no corpo do documento HTML
-    for (var i = 0; i < itens.length; i++) {
-        var novoItem = document.createElement("tr");
-        var dados = itens[i].split(" R$ ");
-        var valor = parseFloat(dados[1]).toFixed(2);
+    // Determina o tipo com base no valor
+    var tipo = (valor >= 0) ? "Receita" : "Despesa";
 
-        // Separar a string da data
-        var indiceInicioData = dados[0].length + valor.length + 7;
-        var data = itens[i].substring(indiceInicioData);
+    // Criamos um objeto com os dados
+    var dados = {
+        descrição: descrição,
+        valor: valor,
+        banco: banco,
+        tipo: tipo,
+        data: data
+    };
+    
+    // Adicionamos o objeto à array
+    dadosArray.push(dados);
 
-        novoItem.innerHTML = `
-            <td>${dados[0]}</td>
-            <td>R$ ${valor}</td>
-            <td>${formatarDataCurta(data)}</td>
-            <td><button onclick="removerItem(${i})">Remover</button></td>
-        `;
+    // Salvar dados no localStorage
+    localStorage.setItem('dadosArray', JSON.stringify(dadosArray));
 
-        // Adicionar a linha à tabela
-        corpoTabela.appendChild(novoItem);
+    // Atualiza a tabela
+    atualizarTabela();
+
+    // Limpar os campos do formulário
+    document.getElementById("descrição").value = "";
+    document.getElementById("valor").value = "";
+    document.getElementById("banco").value = "";
+    document.getElementById("data").value = "";
+});
+
+function atualizarTabela() {
+    var tabelaBody = document.getElementById("corpoTabela");
+    tabelaBody.innerHTML = "";
+
+    // Adiciona linhas à tabela com base nos dados da array
+    for (var i = 0; i < dadosArray.length; i++) {
+        var row = tabelaBody.insertRow(i);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5); // Nova célula para o botão de remover
+
+        cell1.innerHTML = dadosArray[i].descrição;
+        // Adicionando o símbolo "R$" ao valor
+        cell2.innerHTML = "R$ " + dadosArray[i].valor.toFixed(2);
+        cell4.innerHTML = dadosArray[i].banco;
+        
+        // Formatando a data
+        cell5.innerHTML = formatarData(dadosArray[i].data);
+
+        // Adiciona a classe CSS condicionalmente com base no tipo (Receita ou Despesa)
+        var tipoSpan = document.createElement("span");
+        tipoSpan.textContent = dadosArray[i].tipo;
+
+        if (dadosArray[i].tipo === "Receita") {
+            tipoSpan.classList.add("receita");
+        } else if (dadosArray[i].tipo === "Despesa") {
+            tipoSpan.classList.add("despesa");
+        }
+
+        cell3.appendChild(tipoSpan);
+
+         // Adiciona a classe CSS condicionalmente com base no banco
+        switch (dadosArray[i].banco) {
+            case "Inter":
+                cell4.innerHTML = '<span class="inter">' + dadosArray[i].banco.split('').join('</span><span class="inter">') + '</span>';
+                break;
+            case "Nubank":
+                cell4.innerHTML = '<span class="nubank">' + dadosArray[i].banco.split('').join('</span><span class="nubank">') + '</span>';
+                break;
+            case "Santander":
+                cell4.innerHTML = '<span class="santander">' + dadosArray[i].banco.split('').join('</span><span class="santander">') + '</span>';
+                break;
+            case "C6 Bank":
+                cell4.innerHTML = '<span class="c6">' + dadosArray[i].banco.split('').join('</span><span class="c6">') + '</span>';
+                break;
+        }
+
+        // Formatando a data
+        cell5.innerHTML = formatarData(dadosArray[i].data);
+
+        // Adiciona o botão de remover
+        cell6.appendChild(criarBotaoRemover(i));
     }
+    
 
-    // Atualizar o total na interface
-    atualizarTotalNaInterface();
+    // Atualiza o total
+    atualizarTotal();
 }
 
-// Função para formatar uma data no formato curto (short date)
-function formatarDataCurta(data) {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(data).toLocaleDateString(undefined, options);
+function formatarData(data) {
+    var partes = data.split('-'); // Dividir a string da data em partes (ano, mês, dia)
+    
+    var dia = partes[2].padStart(2, '0');
+    var mes = partes[1].padStart(2, '0');
+    var ano = partes[0];
+
+    return `${dia}/${mes}/${ano}`;
 }
 
-function removerItem(indice) {
-    var corpoTabela = document.getElementById("corpoTabela");
-    corpoTabela.deleteRow(indice);
-
-    // Atualizar a lista localmente após remover o item
-    salvarListaLocalmente();
-
-    // Atualizar o total na interface após remover o item
-    atualizarTotalNaInterface();
+function criarBotaoRemover(index) {
+    var botao = document.createElement("button");
+    botao.textContent = "Remover";
+    botao.addEventListener("click", function() {
+        removerLinha(index);
+    });
+    return botao;
 }
 
-// Função para salvar a lista localmente
-function salvarListaLocalmente() {
-    var corpoTabela = document.getElementById("corpoTabela");
-    var linhas = corpoTabela.getElementsByTagName("tr");
-    var itens = [];
-
-    // Obter os itens da tabela e adicionar à array 'itens'
-    for (var i = 0; i < linhas.length; i++) {
-        var colunas = linhas[i].getElementsByTagName("td");
-        var item = `${colunas[0].textContent} R$ ${colunas[1].textContent.slice(2)} ${colunas[2].textContent}`;
-        itens.push(item);
-    }
-
-    // Salvar a array 'itens' localmente
-    localStorage.setItem('listaOrcamentaria', JSON.stringify(itens));
+function removerLinha(index) {
+    dadosArray.splice(index, 1);
+    // Salvar dados no localStorage
+    localStorage.setItem('dadosArray', JSON.stringify(dadosArray));
+    atualizarTabela();
 }
 
-// Função para obter a lista salva localmente
-function obterListaLocalmente() {
-    var listaExistente = localStorage.getItem('listaOrcamentaria');
-    return listaExistente ? JSON.parse(listaExistente) : [];
-}
-
-// Limpar todo o conteúdo no localStorage
-//localStorage.clear();
-
-function calcularTotal() {
-    var lista = obterListaLocalmente();
+function atualizarTotal() {
     var total = 0;
 
-    // Iterar sobre os itens da lista e somar os valores
-    for (var i = 0; i < lista.length; i++) {
-        // Extrair o valor do texto (considerando o formato "Produto - R$ X.XX")
-        var valorStr = lista[i].split(" R$ ")[1];
-        var valor = parseFloat(valorStr);
-
-        // Adicionar o valor ao total
-        total += valor;
+    // Calcula o total com base nos valores na array
+    for (var i = 0; i < dadosArray.length; i++) {
+        total += dadosArray[i].valor;
     }
 
-    return total.toFixed(2);
+    // Atualiza o elemento HTML que exibe o total
+    document.getElementById("total").innerText = "TOTAL: R$ " + total.toFixed(2);
 }
-
-// Função para atualizar a exibição do total na interface
-function atualizarTotalNaInterface() {
-    var totalCalculado = calcularTotal();
-    var elementoTotal = document.getElementById("total");
-    
-    // Atualizar o conteúdo do elemento na interface
-    elementoTotal.textContent = "Total dos Produtos: R$ " + totalCalculado;
-}
-
-
-// Exemplo de chamada da função para mostrar a lista
-mostrarLista();
